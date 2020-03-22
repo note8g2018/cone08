@@ -8,6 +8,8 @@ import 'package:cone08/widget/textForm_m1_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'home_screen.dart';
+
 class LogIn extends StatefulWidget {
   static String route = 'LogIn';
 
@@ -19,15 +21,19 @@ class _LogInState extends State<LogIn> {
   String _userName;
   String _passWord;
 
-  void sendLogin() async {
+  void sendLoginButton() async {
     Person person = Person(userName: _userName, passWord: _passWord);
-    person = await Login.loginToServer(person: person);
-    switch (person.method) {
+    sendLogin(person);
+  }
+
+  void sendLogin(Person person) async {
+    Person personS = await Login.loginToServer(person: person);
+    switch (personS.method) {
       case 'PS':
-        makeToast(person.desc);
+        makeToast(personS.desc);
         break;
       case 'login':
-        saveLogin(person);
+        saveLogin(personS);
         break;
       default:
         makeToast('There are some erorr');
@@ -47,10 +53,28 @@ class _LogInState extends State<LogIn> {
   }
 
   void saveLogin(Person person) async {
-    FileAction.writeToFile2(
+    await FileAction.writeToFile2(
         dataJson: jsonEncode(person), fileName: 'login.json');
-    final String kk = await FileAction.readFromFile2(fileName: 'login.json');
-    print(kk);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home(personClient: person)),
+    );
+  }
+
+  void readLogin() async {
+    final String personString =
+        await FileAction.readFromFile2(fileName: 'login.json');
+    if (personString != null) {
+      Person person = Person.fromJson(jsonDecode(personString));
+      sendLogin(person);
+    }
+  }
+
+  @override
+  void initState() {
+    readLogin();
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -107,7 +131,7 @@ class _LogInState extends State<LogIn> {
                     ),
                   ),
                   onPressed: () {
-                    sendLogin();
+                    sendLoginButton();
                   },
                 ),
               ),

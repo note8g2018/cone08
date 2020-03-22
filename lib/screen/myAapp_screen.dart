@@ -1,3 +1,4 @@
+import 'package:cone08/screen/home_screen.dart';
 import 'package:cone08/screen/reg_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class _MyAppState extends State<MyApp> {
       routes: {
         LogIn.route: (context) => LogIn(),
         RegScreen.route: (context) => RegScreen(),
+        Home.route: (context) => Home(),
       },
     );
   }

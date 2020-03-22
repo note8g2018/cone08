@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:cone08/action/file_action.dart';
 import 'package:cone08/action/validate_action.dart';
+import 'package:cone08/controller/login_controller.dart';
 import 'package:cone08/controller/reg_controller.dart';
 import 'package:cone08/model/person_model.dart';
 import 'package:cone08/widget/textForm_m1_widget.dart';
@@ -6,6 +10,8 @@ import 'package:cone08/widget/text_m1_widget.dart';
 import 'package:cone08/widget/text_m2_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'home_screen.dart';
 
 class RegScreen extends StatefulWidget {
   static String route = 'Reg';
@@ -35,26 +41,35 @@ class _RegScreenState extends State<RegScreen> {
       email: _email,
       method: "reg",
     );
-    final String method = await Reg.regToServer(person: person);
-    String msg;
-    switch (method) {
+    final Person personS = await Reg.regToServer(person: person);
+
+    switch (personS.method) {
       case 'valid':
-        msg = 'The data is not valid';
+        makeToast(personS.desc);
         break;
       case 'taken':
-        msg = 'This user name is taken';
+        makeToast(personS.desc);
         break;
       case 'error':
-        msg = 'There is an error';
+        makeToast('There is an error');
         break;
       case 'login':
-        msg = 'There are some error';
+        loginFromReg(personS);
         break;
       default:
-        msg = 'There are some error';
+        makeToast('There are some error');
         break;
     }
-    makeToast(msg);
+  }
+
+  void loginFromReg(Person person) async {
+    Person personS = await Login.loginToServer(person: person);
+    FileAction.writeToFile2(
+        dataJson: jsonEncode(person), fileName: 'login.json');
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Home(personClient: personS)),
+    );
   }
 
   void makeToast(String msg) {

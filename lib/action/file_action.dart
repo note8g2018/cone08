@@ -15,7 +15,7 @@ class FileAction {
     final String path = directory.path + '/$fileName';
     print(path);
     final File file = File(path);
-    file.writeAsString(dataJson, mode: FileMode.writeOnly);
+    file.writeAsStringSync(dataJson, mode: FileMode.writeOnly, flush: true);
   }
 
   static Future<String> readFromFile2({String fileName}) async {
@@ -29,6 +29,14 @@ class FileAction {
     } else {
       return null;
     }
+  }
+
+  static void deleteFile({String fileName}) async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    final String path = directory.path + '/$fileName';
+    print(path);
+    final File file = File(path);
+    file.deleteSync();
   }
 
   static Future<String> readFromFile({String fileName}) async {
