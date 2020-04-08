@@ -5,7 +5,8 @@ import 'package:dio/dio.dart' as fuck;
 
 abstract class Login {
   static Future<Person> loginToServer({Person person}) async {
-    String url = 'http://192.168.1.100:8888';
+    //String url = 'http://192.168.1.100:8888';
+    String url = 'http://coolme.me:8888';
     fuck.RequestOptions option = fuck.RequestOptions();
     option.baseUrl = url;
     option.method = 'POST';

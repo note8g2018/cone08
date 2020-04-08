@@ -5,7 +5,8 @@ import 'package:dio/dio.dart' as fuck;
 
 abstract class Reg {
   static Future<Person> regToServer({Person person}) async {
-    String url = 'http://192.168.1.100:8888';
+    //String url = 'http://192.168.1.100:8888';
+    String url = 'http://coolme.me:8888';
     fuck.RequestOptions option = fuck.RequestOptions();
     option.responseType = fuck.ResponseType.json;
     //option.connectTimeout = 50000;

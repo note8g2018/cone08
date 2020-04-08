@@ -29,7 +29,8 @@ class _HomeState extends State<Home> {
   IOWebSocketChannel channel;
 
   void websocketInit() {
-    const String url = 'ws://192.168.1.100:8888/picw';
+    //const String url = 'ws://192.168.1.100:8888/picw';
+    const String url = 'ws://coolme.me:8888/picw';
     channel = IOWebSocketChannel.connect(url);
     channel.stream.listen(
             (data){
